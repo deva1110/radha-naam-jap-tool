@@ -13,6 +13,11 @@
             padding: 20px;
             background-image: url('https://www.transparenttextures.com/patterns/peacock-feather.png'); /* Peacock feather texture */
             background-size: cover;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        body.light-mode {
+            background-color: #f4f4f4;
+            color: #333;
         }
         .container {
             max-width: 600px;
@@ -21,6 +26,10 @@
             background-color: rgba(0, 0, 0, 0.7);
             border-radius: 15px;
             box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            transition: background-color 0.3s;
+        }
+        body.light-mode .container {
+            background-color: rgba(255, 255, 255, 0.9);
         }
         h1 {
             color: #ffd700;
@@ -28,6 +37,9 @@
             font-family: 'Cinzel', serif;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
             animation: glow 2s infinite alternate;
+        }
+        body.light-mode h1 {
+            color: #ff6f61;
         }
         @keyframes glow {
             from { text-shadow: 0 0 10px #ffd700; }
@@ -38,6 +50,9 @@
             color: #ffd700;
             margin: 20px 0;
             font-size: 1.2em;
+        }
+        body.light-mode .quote {
+            color: #ff6f61;
         }
         .counter {
             font-size: 4em;
@@ -64,10 +79,17 @@
             font-size: 0.9em;
             color: #aaa;
         }
+        .footer span {
+            font-size: 0.8em;
+            color: #888;
+        }
         .timer {
             font-size: 1.5em;
             color: #ffd700;
             margin: 20px 0;
+        }
+        body.light-mode .timer {
+            color: #ff6f61;
         }
         .feature-section {
             margin-top: 30px;
@@ -76,9 +98,15 @@
             background-color: rgba(255, 215, 0, 0.1);
             border-radius: 10px;
         }
+        body.light-mode .feature-section {
+            background-color: rgba(255, 111, 97, 0.1);
+        }
         .feature-section h3 {
             color: #ffd700;
             font-size: 1.5em;
+        }
+        body.light-mode .feature-section h3 {
+            color: #ff6f61;
         }
         .feature-section ul {
             list-style-type: none;
@@ -88,6 +116,9 @@
             margin: 10px 0;
             font-size: 1.1em;
             color: #fff;
+        }
+        body.light-mode .feature-section li {
+            color: #333;
         }
         .goal-section {
             margin-top: 20px;
@@ -100,11 +131,19 @@
             background-color: rgba(255, 215, 0, 0.1);
             color: #fff;
         }
+        body.light-mode .goal-section input {
+            border-color: #ff6f61;
+            background-color: rgba(255, 111, 97, 0.1);
+            color: #333;
+        }
         .progress-bar {
             width: 100%;
             background-color: rgba(255, 215, 0, 0.1);
             border-radius: 10px;
             margin: 10px 0;
+        }
+        body.light-mode .progress-bar {
+            background-color: rgba(255, 111, 97, 0.1);
         }
         .progress-bar-fill {
             height: 10px;
@@ -113,10 +152,84 @@
             width: 0;
             transition: width 0.5s ease;
         }
+        .reward-message {
+            margin-top: 20px;
+            font-size: 1.5em;
+            color: #ffd700;
+            display: none;
+        }
+        body.light-mode .reward-message {
+            color: #ff6f61;
+        }
+        .confetti {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+        .confetti-piece {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #ff6f61;
+            animation: confetti-fall 2s linear infinite;
+        }
+        @keyframes confetti-fall {
+            0% { transform: translateY(-10vh) rotate(0deg); }
+            100% { transform: translateY(110vh) rotate(720deg); }
+        }
+        .mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #ff6f61;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2em;
+        }
+        .streak-section {
+            margin-top: 20px;
+        }
+        .streak-section h3 {
+            color: #ffd700;
+            font-size: 1.5em;
+        }
+        body.light-mode .streak-section h3 {
+            color: #ff6f61;
+        }
+        .history-section {
+            margin-top: 20px;
+        }
+        .history-section h3 {
+            color: #ffd700;
+            font-size: 1.5em;
+        }
+        body.light-mode .history-section h3 {
+            color: #ff6f61;
+        }
+        .history-section ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .history-section li {
+            margin: 10px 0;
+            font-size: 1.1em;
+            color: #fff;
+        }
+        body.light-mode .history-section li {
+            color: #333;
+        }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <button class="mode-toggle" onclick="toggleMode()">🌙</button>
     <div class="container">
         <h1>Radha Naam Jap Tool</h1>
         <div class="quote" id="quote">
@@ -139,6 +252,19 @@
             <p id="goalStatus"></p>
         </div>
 
+        <div class="streak-section">
+            <h3>📅 Daily Streak: <span id="streak">0</span> days</h3>
+        </div>
+
+        <div class="history-section">
+            <h3>📜 Chanting History:</h3>
+            <ul id="historyList"></ul>
+        </div>
+
+        <div class="reward-message" id="rewardMessage">
+            Congratulations! Radha-Krishna is pleased with your devotion. 🙏
+        </div>
+
         <div class="feature-section">
             <h3>Benefits of Chanting Radha's Name:</h3>
             <ul>
@@ -151,27 +277,21 @@
         </div>
 
         <div class="footer">
-            Keep chanting and stay blessed! 🙏
+            Keep chanting and stay blessed! 🙏<br>
+            <span>Created by Amol Katke</span>
         </div>
     </div>
 
-    <!-- Audio for background music (flute) and chanting sound -->
-    <audio id="backgroundMusic" loop>
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
-    <audio id="chantSound">
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
+    <!-- Confetti Animation -->
+    <div class="confetti" id="confetti"></div>
 
     <script>
         let count = 0;
         let timerInterval;
         let seconds = 0, minutes = 0, hours = 0;
         let dailyGoal = 0;
-        const backgroundMusic = document.getElementById('backgroundMusic');
-        const chantSound = document.getElementById('chantSound');
+        let streak = 0;
+        let history = [];
 
         const quotes = [
             "Chant the name of Radha and feel the divine love.",
@@ -184,10 +304,17 @@
             "Feel the divine presence with every chant of Radha."
         ];
 
+        const gitaQuotes = [
+            "You have the right to work, but never to the fruit of work. - Bhagavad Gita 2.47",
+            "The soul is neither born, nor does it ever die. - Bhagavad Gita 2.20",
+            "Set your heart upon your work, but never on its reward. - Bhagavad Gita 2.47",
+            "The self-controlled soul, who moves amongst sense objects, free from attachment and aversion, attains peace. - Bhagavad Gita 2.64",
+            "When meditation is mastered, the mind is unwavering like the flame of a lamp in a windless place. - Bhagavad Gita 6.19"
+        ];
+
         function chant() {
             count++;
             document.getElementById('counter').innerText = count;
-            chantSound.play(); // Play chanting sound
             if (count % 10 === 0) {
                 const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
                 document.getElementById('quote').innerText = randomQuote;
@@ -205,13 +332,11 @@
         function startTimer() {
             if (timerInterval) return;
             timerInterval = setInterval(updateTimer, 1000);
-            backgroundMusic.play(); // Start flute background music
         }
 
         function stopTimer() {
             clearInterval(timerInterval);
             timerInterval = null;
-            backgroundMusic.pause(); // Pause flute background music
         }
 
         function updateTimer() {
@@ -246,8 +371,52 @@
                 document.getElementById('progressBar').style.width = `${progress}%`;
                 if (count >= dailyGoal) {
                     document.getElementById('goalStatus').innerText = "Goal achieved! 🙌";
+                    document.getElementById('rewardMessage').style.display = "block";
+                    createConfetti();
+                    updateStreak();
+                    addToHistory();
                 }
             }
+        }
+
+        function createConfetti() {
+            const confettiContainer = document.getElementById('confetti');
+            for (let i = 0; i < 100; i++) {
+                const confettiPiece = document.createElement('div');
+                confettiPiece.classList.add('confetti-piece');
+                confettiPiece.style.left = `${Math.random() * 100}vw`;
+                confettiPiece.style.animationDelay = `${Math.random()}s`;
+                confettiContainer.appendChild(confettiPiece);
+            }
+        }
+
+        function updateStreak() {
+            streak++;
+            document.getElementById('streak').innerText = streak;
+        }
+
+        function addToHistory() {
+            const date = new Date().toLocaleDateString();
+            history.push({ date, count });
+            const historyList = document.getElementById('historyList');
+            historyList.innerHTML = history.map(entry => `<li>${entry.date}: ${entry.count} chants</li>`).join('');
+        }
+
+        function toggleMode() {
+            document.body.classList.toggle('light-mode');
+            const modeToggle = document.querySelector('.mode-toggle');
+            modeToggle.innerText = document.body.classList.contains('light-mode') ? '🌞' : '🌙';
+        }
+
+        function shareOnWhatsApp() {
+            const message = `I just completed ${count} chants of Radha's name! 🙏\nKeep chanting and stay blessed! 🌸`;
+            const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
+
+        function showGitaQuote() {
+            const randomGitaQuote = gitaQuotes[Math.floor(Math.random() * gitaQuotes.length)];
+            document.getElementById('quote').innerText = randomGitaQuote;
         }
 
         // Load saved progress from local storage
@@ -262,12 +431,23 @@
                 document.getElementById('goalStatus').innerText = `Goal: ${dailyGoal} chants`;
                 updateProgress();
             }
+            if (localStorage.getItem('streak')) {
+                streak = parseInt(localStorage.getItem('streak'));
+                document.getElementById('streak').innerText = streak;
+            }
+            if (localStorage.getItem('history')) {
+                history = JSON.parse(localStorage.getItem('history'));
+                const historyList = document.getElementById('historyList');
+                historyList.innerHTML = history.map(entry => `<li>${entry.date}: ${entry.count} chants</li>`).join('');
+            }
         };
 
         // Save progress to local storage
         window.onbeforeunload = () => {
             localStorage.setItem('count', count);
             localStorage.setItem('dailyGoal', dailyGoal);
+            localStorage.setItem('streak', streak);
+            localStorage.setItem('history', JSON.stringify(history));
         };
     </script>
 </body>
