@@ -1,99 +1,178 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Radha Naam Jap Tool</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Georgia', serif;
+            background-color: #1a1a1a;
+            color: #fff;
             text-align: center;
-            background-image: url('https://images.unsplash.com/photo-1572965736615-9f04388cba69'); /* Peacock feather background */
-            background-size: cover;
-            background-position: center;
-            margin: 0;
             padding: 20px;
-            color: white;
+            background-image: url('https://www.transparenttextures.com/patterns/peacock-feather.png'); /* Peacock feather texture */
+            background-size: cover;
         }
-        .counter-box {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 30px;
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
             border-radius: 15px;
-            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
-            display: inline-block;
-            animation: fadeIn 1.5s ease-in-out;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
         }
         h1 {
-            color: #d63384;
-            font-size: 28px;
+            color: #ffd700;
+            font-size: 3em;
+            font-family: 'Cinzel', serif;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
         .quote {
             font-style: italic;
-            font-size: 18px;
-            margin: 10px 0;
-            color: #555;
+            color: #ffd700;
+            margin: 20px 0;
+            font-size: 1.2em;
         }
         .counter {
-            font-size: 50px;
-            font-weight: bold;
+            font-size: 4em;
+            color: #ff6f61;
             margin: 20px 0;
-            color: #28a745;
+            font-family: 'Arial', sans-serif;
         }
         button {
-            padding: 12px 24px;
-            font-size: 20px;
+            background-color: #ff6f61;
+            color: #fff;
             border: none;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            border-radius: 5px;
             cursor: pointer;
             margin: 10px;
-            border-radius: 8px;
-            transition: transform 0.2s;
+            transition: background-color 0.3s ease;
         }
-        .count-btn { background: #28a745; color: white; }
-        .reset-btn { background: #dc3545; color: white; }
         button:hover {
-            transform: scale(1.1);
+            background-color: #ff3b2f;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 0.9em;
+            color: #aaa;
+        }
+        .timer {
+            font-size: 1.5em;
+            color: #ffd700;
+            margin: 20px 0;
+        }
+        .feature-section {
+            margin-top: 30px;
+            text-align: left;
+            padding: 10px;
+            background-color: rgba(255, 215, 0, 0.1);
+            border-radius: 10px;
+        }
+        .feature-section h3 {
+            color: #ffd700;
+            font-size: 1.5em;
+        }
+        .feature-section ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .feature-section li {
+            margin: 10px 0;
+            font-size: 1.1em;
+            color: #fff;
         }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="counter-box">
+    <div class="container">
         <h1>Radha Naam Jap Tool</h1>
-        <p class="quote" id="quote">"Chant the holy name and feel divine bliss!"</p>
+        <div class="quote" id="quote">
+            "Chant the name of Radha and feel the divine love."
+        </div>
         <div class="counter" id="counter">0</div>
-        <button class="count-btn" onclick="incrementCount()">जय राधे!</button>
-        <button class="reset-btn" onclick="resetCount()">रीसेट</button>
+        <button onclick="chant()">Chant Radha</button>
+        <button onclick="resetCounter()">Reset</button>
+        <div class="timer" id="timer">00:00:00</div>
+        <button onclick="startTimer()">Start Timer</button>
+        <button onclick="stopTimer()">Stop Timer</button>
+
+        <div class="feature-section">
+            <h3>Benefits of Chanting Radha's Name:</h3>
+            <ul>
+                <li>One step closer to Radha-Krishna's divine love.</li>
+                <li>Radha-Krishna hears every chant of your heart.</li>
+                <li>Chanting purifies the mind and soul.</li>
+                <li>Brings peace, happiness, and spiritual growth.</li>
+                <li>Connects you to the eternal love of Radha and Krishna.</li>
+            </ul>
+        </div>
+
+        <div class="footer">
+            Keep chanting and stay blessed! 🙏
+        </div>
     </div>
+
     <script>
-        let count = localStorage.getItem('chantCount') ? parseInt(localStorage.getItem('chantCount')) : 0;
-        document.getElementById('counter').textContent = count;
+        let count = 0;
+        let timerInterval;
+        let seconds = 0, minutes = 0, hours = 0;
 
-        function incrementCount() {
+        const quotes = [
+            "Chant the name of Radha and feel the divine love.",
+            "Radha's name brings peace and happiness.",
+            "Let the divine energy of Radha fill your heart.",
+            "Every chant of Radha's name brings you closer to the divine.",
+            "Radha's love is eternal and pure.",
+            "Chanting Radha's name is a step towards spiritual bliss.",
+            "Radha-Krishna hears every chant of your heart.",
+            "Feel the divine presence with every chant of Radha."
+        ];
+
+        function chant() {
             count++;
-            document.getElementById('counter').textContent = count;
-            localStorage.setItem('chantCount', count);
-            changeQuote();
+            document.getElementById('counter').innerText = count;
+            if (count % 10 === 0) {
+                const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+                document.getElementById('quote').innerText = randomQuote;
+            }
         }
 
-        function resetCount() {
+        function resetCounter() {
             count = 0;
-            document.getElementById('counter').textContent = count;
-            localStorage.setItem('chantCount', count);
+            document.getElementById('counter').innerText = count;
+            document.getElementById('quote').innerText = quotes[0];
         }
 
-        function changeQuote() {
-            const quotes = [
-                "Chant the holy name and feel divine bliss!",
-                "हरि नाम जपो, मन को शांति मिलेगी।",
-                "Spiritual chanting purifies the soul!",
-                "राधे-राधे बोल, जीवन सफल हो जाएगा।",
-                "Hare Krishna Hare Rama, the path to enlightenment!"
-            ];
-            const randomIndex = Math.floor(Math.random() * quotes.length);
-            document.getElementById('quote').textContent = quotes[randomIndex];
+        function startTimer() {
+            if (timerInterval) return;
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+        }
+
+        function updateTimer() {
+            seconds++;
+            if (seconds === 60) {
+                seconds = 0;
+                minutes++;
+            }
+            if (minutes === 60) {
+                minutes = 0;
+                hours++;
+            }
+            const timer = `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+            document.getElementById('timer').innerText = timer;
+        }
+
+        function pad(value) {
+            return value < 10 ? `0${value}` : value;
         }
     </script>
 </body>
