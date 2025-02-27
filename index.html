@@ -155,13 +155,13 @@
         </div>
     </div>
 
-    <!-- Audio for background music and chanting sound -->
+    <!-- Audio for background music (flute) and chanting sound -->
     <audio id="backgroundMusic" loop>
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
     <audio id="chantSound">
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
 
@@ -205,13 +205,13 @@
         function startTimer() {
             if (timerInterval) return;
             timerInterval = setInterval(updateTimer, 1000);
-            backgroundMusic.play(); // Start background music
+            backgroundMusic.play(); // Start flute background music
         }
 
         function stopTimer() {
             clearInterval(timerInterval);
             timerInterval = null;
-            backgroundMusic.pause(); // Pause background music
+            backgroundMusic.pause(); // Pause flute background music
         }
 
         function updateTimer() {
