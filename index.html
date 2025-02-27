@@ -27,6 +27,11 @@
             font-size: 3em;
             font-family: 'Cinzel', serif;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            animation: glow 2s infinite alternate;
+        }
+        @keyframes glow {
+            from { text-shadow: 0 0 10px #ffd700; }
+            to { text-shadow: 0 0 20px #ff6f61; }
         }
         .quote {
             font-style: italic;
@@ -84,6 +89,30 @@
             font-size: 1.1em;
             color: #fff;
         }
+        .goal-section {
+            margin-top: 20px;
+        }
+        .goal-section input {
+            padding: 5px;
+            font-size: 1em;
+            border-radius: 5px;
+            border: 1px solid #ffd700;
+            background-color: rgba(255, 215, 0, 0.1);
+            color: #fff;
+        }
+        .progress-bar {
+            width: 100%;
+            background-color: rgba(255, 215, 0, 0.1);
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+        .progress-bar-fill {
+            height: 10px;
+            background-color: #ff6f61;
+            border-radius: 10px;
+            width: 0;
+            transition: width 0.5s ease;
+        }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet">
 </head>
@@ -99,6 +128,16 @@
         <div class="timer" id="timer">00:00:00</div>
         <button onclick="startTimer()">Start Timer</button>
         <button onclick="stopTimer()">Stop Timer</button>
+
+        <div class="goal-section">
+            <h3>Set Daily Goal:</h3>
+            <input type="number" id="goalInput" placeholder="Enter your goal (e.g., 108)">
+            <button onclick="setGoal()">Set Goal</button>
+            <div class="progress-bar">
+                <div class="progress-bar-fill" id="progressBar"></div>
+            </div>
+            <p id="goalStatus"></p>
+        </div>
 
         <div class="feature-section">
             <h3>Benefits of Chanting Radha's Name:</h3>
@@ -116,10 +155,23 @@
         </div>
     </div>
 
+    <!-- Audio for background music and chanting sound -->
+    <audio id="backgroundMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <audio id="chantSound">
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
     <script>
         let count = 0;
         let timerInterval;
         let seconds = 0, minutes = 0, hours = 0;
+        let dailyGoal = 0;
+        const backgroundMusic = document.getElementById('backgroundMusic');
+        const chantSound = document.getElementById('chantSound');
 
         const quotes = [
             "Chant the name of Radha and feel the divine love.",
@@ -135,26 +187,31 @@
         function chant() {
             count++;
             document.getElementById('counter').innerText = count;
+            chantSound.play(); // Play chanting sound
             if (count % 10 === 0) {
                 const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
                 document.getElementById('quote').innerText = randomQuote;
             }
+            updateProgress();
         }
 
         function resetCounter() {
             count = 0;
             document.getElementById('counter').innerText = count;
             document.getElementById('quote').innerText = quotes[0];
+            updateProgress();
         }
 
         function startTimer() {
             if (timerInterval) return;
             timerInterval = setInterval(updateTimer, 1000);
+            backgroundMusic.play(); // Start background music
         }
 
         function stopTimer() {
             clearInterval(timerInterval);
             timerInterval = null;
+            backgroundMusic.pause(); // Pause background music
         }
 
         function updateTimer() {
@@ -174,6 +231,44 @@
         function pad(value) {
             return value < 10 ? `0${value}` : value;
         }
+
+        function setGoal() {
+            dailyGoal = parseInt(document.getElementById('goalInput').value);
+            if (dailyGoal > 0) {
+                document.getElementById('goalStatus').innerText = `Goal: ${dailyGoal} chants`;
+                updateProgress();
+            }
+        }
+
+        function updateProgress() {
+            if (dailyGoal > 0) {
+                const progress = (count / dailyGoal) * 100;
+                document.getElementById('progressBar').style.width = `${progress}%`;
+                if (count >= dailyGoal) {
+                    document.getElementById('goalStatus').innerText = "Goal achieved! 🙌";
+                }
+            }
+        }
+
+        // Load saved progress from local storage
+        window.onload = () => {
+            if (localStorage.getItem('count')) {
+                count = parseInt(localStorage.getItem('count'));
+                document.getElementById('counter').innerText = count;
+            }
+            if (localStorage.getItem('dailyGoal')) {
+                dailyGoal = parseInt(localStorage.getItem('dailyGoal'));
+                document.getElementById('goalInput').value = dailyGoal;
+                document.getElementById('goalStatus').innerText = `Goal: ${dailyGoal} chants`;
+                updateProgress();
+            }
+        };
+
+        // Save progress to local storage
+        window.onbeforeunload = () => {
+            localStorage.setItem('count', count);
+            localStorage.setItem('dailyGoal', dailyGoal);
+        };
     </script>
 </body>
 </html>
