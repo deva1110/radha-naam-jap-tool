@@ -6,41 +6,63 @@
     <title>Radha Naam Jap Tool</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             text-align: center;
-            background-color: #f4f4f4;
+            background-image: url('https://images.unsplash.com/photo-1572965736615-9f04388cba69'); /* Peacock feather background */
+            background-size: cover;
+            background-position: center;
             margin: 0;
             padding: 20px;
+            color: white;
         }
         .counter-box {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
             display: inline-block;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
         }
         h1 {
             color: #d63384;
+            font-size: 28px;
+        }
+        .quote {
+            font-style: italic;
+            font-size: 18px;
+            margin: 10px 0;
+            color: #555;
         }
         .counter {
-            font-size: 40px;
+            font-size: 50px;
+            font-weight: bold;
             margin: 20px 0;
+            color: #28a745;
         }
         button {
-            padding: 10px 20px;
-            font-size: 18px;
+            padding: 12px 24px;
+            font-size: 20px;
             border: none;
             cursor: pointer;
-            margin: 5px;
-            border-radius: 5px;
+            margin: 10px;
+            border-radius: 8px;
+            transition: transform 0.2s;
         }
         .count-btn { background: #28a745; color: white; }
         .reset-btn { background: #dc3545; color: white; }
+        button:hover {
+            transform: scale(1.1);
+        }
     </style>
 </head>
 <body>
     <div class="counter-box">
         <h1>Radha Naam Jap Tool</h1>
+        <p class="quote" id="quote">"Chant the holy name and feel divine bliss!"</p>
         <div class="counter" id="counter">0</div>
         <button class="count-btn" onclick="incrementCount()">जय राधे!</button>
         <button class="reset-btn" onclick="resetCount()">रीसेट</button>
@@ -53,12 +75,25 @@
             count++;
             document.getElementById('counter').textContent = count;
             localStorage.setItem('chantCount', count);
+            changeQuote();
         }
 
         function resetCount() {
             count = 0;
             document.getElementById('counter').textContent = count;
             localStorage.setItem('chantCount', count);
+        }
+
+        function changeQuote() {
+            const quotes = [
+                "Chant the holy name and feel divine bliss!",
+                "हरि नाम जपो, मन को शांति मिलेगी।",
+                "Spiritual chanting purifies the soul!",
+                "राधे-राधे बोल, जीवन सफल हो जाएगा।",
+                "Hare Krishna Hare Rama, the path to enlightenment!"
+            ];
+            const randomIndex = Math.floor(Math.random() * quotes.length);
+            document.getElementById('quote').textContent = quotes[randomIndex];
         }
     </script>
 </body>
